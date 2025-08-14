@@ -120,7 +120,6 @@ const AuthTabs = () => {
 
             {activeTab === 'login' && (
                 <div className="space-y-6 animate-fadeIn">
-                    <h2 className='text-3xl font-bold text-gray-800 text-center'>Welcome Back</h2>
                     <p className="text-gray-600 text-center">Sign in to continue your learning journey</p>
                     <form className="space-y-4" onSubmit={(e) => {
                         e.preventDefault();
