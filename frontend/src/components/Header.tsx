@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ username, registeredCourses, disableAva
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center">
           <h1
-            className="text-xl font-bold text-brand-primary cursor-pointer hover:opacity-80 transition-opacity"
+            className={`text-xl font-bold text-brand-primary ${isLoggedIn ? 'cursor-pointer hover:opacity-80' : ''} transition-opacity`}
             onClick={() => {
               // Only redirect if user is logged in
               if (isLoggedIn) {
