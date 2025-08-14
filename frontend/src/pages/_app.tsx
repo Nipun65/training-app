@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [username, setUsername] = useState("John Doe");
-  const [registeredCourses, setRegisteredCourses] = useState(3);
-
+  const registeredCoursesVal = router.pathname === '/watch' && router.query.preview === 'true' ? 0 : 3
+  const [registeredCourses, setRegisteredCourses] = useState(registeredCoursesVal);
   // Check if we should show the header (not on home page or explored-courses page)
   const showHeader = router.pathname !== '/' && router.pathname !== '/explored-courses' && router.pathname !== '/learn-more';
   
