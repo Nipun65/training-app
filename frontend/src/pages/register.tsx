@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import RegistrationForm from '../components/RegistrationForm';
-import LoginForm from '../components/LoginForm';
-import CourseRegistrationForm from '../components/CourseRegistrationForm';
 
 const tabs = [
     { key: 'register', label: 'Register', icon: '📝' },
@@ -29,11 +26,6 @@ const AuthTabs = () => {
                         {tab.label}
                     </button>
                 ))}
-            </div>
-            <div className="animate-fade-in">
-                {activeTab === 'register' && <RegistrationForm />}
-                {activeTab === 'login' && <LoginForm />}
-                {activeTab === 'course' && <CourseRegistrationForm />}
             </div>
         </div>
     );

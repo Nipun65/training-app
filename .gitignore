@@ -6,6 +6,8 @@ backend/node_modules
 frontend/.env
 backend/.env
 
+# build
+backend/dist
 
 # Next.js build output
 frontend/.next
