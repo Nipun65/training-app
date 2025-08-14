@@ -1,0 +1,23 @@
+import '../styles/index.css';
+import type { AppProps } from 'next/app';
+import Header from '../components/Header';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+
+function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const [username, setUsername] = useState("John Doe");
+  const [registeredCourses, setRegisteredCourses] = useState(3);
+
+  // Check if we should show the header (not on home page or explored-courses page)
+  const showHeader = router.pathname !== '/' && router.pathname !== '/explored-courses' && router.pathname !== '/learn-more';
+
+  return (
+    <div>
+      {showHeader && <Header username={username} registeredCourses={registeredCourses} />}
+      <Component {...pageProps} />
+    </div>
+  );
+}
+
+export default MyApp;
