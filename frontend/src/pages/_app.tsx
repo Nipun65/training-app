@@ -11,10 +11,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // Check if we should show the header (not on home page or explored-courses page)
   const showHeader = router.pathname !== '/' && router.pathname !== '/explored-courses' && router.pathname !== '/learn-more';
+  
+  // Check if we should disable the avatar (on explored-courses page or watch page with preview)
+  const disableAvatar = router.pathname === '/explored-courses' ||
+                       (router.pathname === '/watch' && router.query.preview === 'true');
 
   return (
     <div>
-      {showHeader && <Header username={username} registeredCourses={registeredCourses} />}
+      {showHeader && <Header username={username} registeredCourses={registeredCourses} disableAvatar={disableAvatar} />}
       <Component {...pageProps} />
     </div>
   );

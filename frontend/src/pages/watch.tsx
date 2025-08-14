@@ -11,7 +11,29 @@ const WatchPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
+    // Check login status
+    useEffect(() => {
+        // Check if user is logged in (client-side only)
+        const loggedIn = typeof window !== 'undefined' && localStorage.getItem('isLoggedIn') === 'true';
+        setIsLoggedIn(loggedIn);
+    }, [router, preview]);
 
+    // Listen for storage changes (in case login state changes in another tab)
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const loggedIn = typeof window !== 'undefined' && localStorage.getItem('isLoggedIn') === 'true';
+            setIsLoggedIn(loggedIn);
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+    
     useEffect(() => {
         const fetchCourseAndVideo = async () => {
             if (courseId) {
@@ -52,7 +74,7 @@ const WatchPage = () => {
         };
 
         fetchCourseAndVideo();
-    }, [courseId]);
+    }, [courseId, isLoggedIn, preview, router]);
 
     if (loading) {
         return (
@@ -90,15 +112,27 @@ const WatchPage = () => {
         <div className="min-h-screen bg-gray-50 py-8">
             <div className="container mx-auto px-4">
                 <div className="mb-6">
-                    <button 
-                        onClick={() => router.push('/courses')}
-                        className="flex items-center text-brand-primary hover:text-brand-primaryDark transition"
-                    >
-                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                        Back to Courses
-                    </button>
+                    {(isLoggedIn && (router.pathname === '/watch' && router.query.preview !== 'true')) ? (
+                        <button
+                            onClick={() => router.push('/courses')}
+                            className="flex items-center text-brand-primary hover:text-brand-primaryDark transition"
+                        >
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to Courses
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => router.push('/explored-courses')}
+                            className="flex items-center text-brand-primary hover:text-brand-primaryDark transition"
+                        >
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to Explore
+                        </button>
+                    )}
                 </div>
                 
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden">

@@ -14,7 +14,7 @@ const ExploredCoursesPage = () => {
               href="/"
               className="inline-block px-6 py-3 bg-brand-primary text-white font-semibold rounded-lg shadow-md hover:bg-brand-primaryDark transition duration-300"
             >
-              Back to login
+              Back to Login
             </a>
           </div>
         </div>

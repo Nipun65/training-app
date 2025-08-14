@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 const AuthTabs = () => {
     const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
@@ -125,7 +126,9 @@ const AuthTabs = () => {
                         e.preventDefault();
                         // Validate form before submitting
                         if (validateLoginForm()) {
-                            // Bypass login and redirect to courses page
+                            // Set login state in localStorage
+                            localStorage.setItem('isLoggedIn', 'true');
+                            // Redirect to courses page
                             window.location.href = '/courses';
                         }
                     }}>
@@ -282,13 +285,24 @@ const AuthTabs = () => {
 };
 
 const Home: React.FC = () => {
+    const router = useRouter();
+    
+    useEffect(() => {
+        // Check if user is already logged in
+        const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('isLoggedIn') === 'true';
+        if (isLoggedIn) {
+            // Redirect to courses page
+            router.push('/courses');
+        }
+    }, [router]);
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-primary/5 via-brand-secondary/5 to-brand-primaryDark/5 p-4">
             <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-6xl gap-8">
                 {/* Left: Welcome Text */}
                 <div className="flex flex-col justify-center w-full lg:w-2/5 text-center lg:text-left">
                     <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4">
-                        Welcome to <a href="/courses" className="text-brand-primary hover:text-brand-primaryDark transition">SkillBoost</a> <a href="/courses" className="text-brand-secondary hover:text-brand-secondaryDark transition">Academy</a>
+                        Welcome to <a href="/courses" className="text-brand-primary">SkillBoost</a> <a href="/courses" className="text-brand-secondary">Academy</a>
                     </h1>
                     <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
                         Enhance your skills with our comprehensive courses and track your progress as you learn.

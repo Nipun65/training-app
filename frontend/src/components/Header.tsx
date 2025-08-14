@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface HeaderProps {
   username: string;
   registeredCourses: number;
+  disableAvatar?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ username, registeredCourses }) => {
+const Header: React.FC<HeaderProps> = ({ username, registeredCourses, disableAvatar = false }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check login state on initial load
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
+  }, []);
 
   const handleLogout = () => {
-    // For now, just redirect to the home page
+    // Clear login state from localStorage
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
+    // Redirect to the home page
     window.location.href = '/';
+  };
+
+  const handleUserMenuClick = () => {
+    // Set login state in localStorage
+    localStorage.setItem('isLoggedIn', 'true');
+    // Update local state to reflect login
+    setIsLoggedIn(true);
+    setShowUserMenu(!showUserMenu);
   };
 
   return (
@@ -20,8 +39,8 @@ const Header: React.FC<HeaderProps> = ({ username, registeredCourses }) => {
           <h1
             className="text-xl font-bold text-brand-primary cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => {
-              // Only redirect if user is logged in (username is provided)
-              if (username) {
+              // Only redirect if user is logged in
+              if (isLoggedIn) {
                 window.location.href = '/courses';
               }
             }}
@@ -37,9 +56,10 @@ const Header: React.FC<HeaderProps> = ({ username, registeredCourses }) => {
           </div>
           
           <div className="relative">
-            <button 
-              className="flex items-center space-x-2 focus:outline-none"
-              onClick={() => setShowUserMenu(!showUserMenu)}
+            <button
+              className={`flex items-center space-x-2 focus:outline-none ${disableAvatar ? 'cursor-default' : ''}`}
+              onClick={!disableAvatar ? handleUserMenuClick : undefined}
+              disabled={disableAvatar}
             >
               <div className="w-10 h-10 rounded-full bg-brand-primary flex items-center justify-center text-white font-semibold">
                 {username.charAt(0).toUpperCase()}
@@ -52,12 +72,14 @@ const Header: React.FC<HeaderProps> = ({ username, registeredCourses }) => {
                   <p className="text-sm font-medium text-gray-900">{username}</p>
                   <p className="text-xs text-gray-500">Student</p>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Logout
-                </button>
+                {isLoggedIn && (
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                )}
               </div>
             )}
           </div>
