@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Course } from '../types';
+import { useRouter } from 'next/router';
 
 interface CourseListProps {
     disableSubscribe?: boolean;
@@ -10,8 +11,14 @@ const CourseList: React.FC<CourseListProps> = ({ disableSubscribe = false }) => 
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
+    const [subscribingCourseId, setSubscribingCourseId] = useState<string | null>(null);
+    const router = useRouter();
     useEffect(() => {
+            if(disableSubscribe && localStorage.getItem('isLoggedIn') === 'true')
+            {
+                router.push('/courses')
+            }
+        else {
         const fetchCourses = async () => {
             try {
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/courses`);
@@ -24,16 +31,13 @@ const CourseList: React.FC<CourseListProps> = ({ disableSubscribe = false }) => 
             }
         };
 
-        fetchCourses();
+        fetchCourses();}
     }, []);
 
     const handleSubscribe = async (courseId: string) => {
         try {
             // Show loading state
-            const subscribeButton = document.activeElement as HTMLButtonElement;
-            const originalText = subscribeButton.textContent;
-            subscribeButton.textContent = 'Subscribing...';
-            subscribeButton.disabled = true;
+            setSubscribingCourseId(courseId);
             
             // In a real application, you would send user information as well
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/register`, { courseId });
@@ -54,12 +58,8 @@ const CourseList: React.FC<CourseListProps> = ({ disableSubscribe = false }) => 
             console.error('Error subscribing to course:', error);
             alert('Failed to subscribe to course. Please try again.');
         } finally {
-            // Reset button state if user stays on page
-            const subscribeButton = document.activeElement as HTMLButtonElement;
-            if (subscribeButton) {
-                subscribeButton.disabled = false;
-                subscribeButton.textContent = 'Subscribe & Start Learning';
-            }
+            // Reset loading state
+            setSubscribingCourseId(null);
         }
     };
 
@@ -129,14 +129,24 @@ const CourseList: React.FC<CourseListProps> = ({ disableSubscribe = false }) => 
                                 )}
                                 <button
                                     onClick={() => !disableSubscribe && handleSubscribe(course.id)}
-                                    disabled={disableSubscribe}
-                                    className={`flex-1 py-3 font-semibold rounded-lg transition duration-300 shadow-md hover:shadow-lg ${
+                                    disabled={disableSubscribe || subscribingCourseId === course.id}
+                                    className={`flex-1 py-3 font-semibold rounded-lg transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center ${
                                         disableSubscribe
                                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                            : subscribingCourseId === course.id
+                                            ? 'bg-brand-primary text-white cursor-not-allowed'
                                             : 'bg-brand-primary text-white hover:bg-brand-primaryDark'
                                     }`}
                                 >
-                                    {disableSubscribe ? 'Explore Only' : 'Subscribe & Start Learning'}
+                                    {subscribingCourseId === course.id ? (
+                                        <>
+                                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Subscribing...
+                                        </>
+                                    ) : disableSubscribe ? 'Explore Only' : 'Subscribe & Start Learning'}
                                 </button>
                             </div>
                         </div>
