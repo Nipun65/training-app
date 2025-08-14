@@ -12,5 +12,6 @@ export interface Course {
     courseImage: string;
     courseUrl: string;
     ratings: number;
+    price: number;
     instructor: Instructor;
 }

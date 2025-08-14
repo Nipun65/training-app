@@ -92,6 +92,9 @@ const CourseList: React.FC<CourseListProps> = ({ disableSubscribe = false }) => 
                                     <span className="text-yellow-800 font-semibold">{course.ratings}</span>
                                 </div>
                             </div>
+                            <div className="mb-4">
+                                <span className="text-2xl font-bold text-brand-primary">${course.price.toFixed(2)}</span>
+                            </div>
                             
                             <div className="flex items-center mb-4">
                                 <img

@@ -103,11 +103,18 @@ const WatchPage = () => {
                 
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                     <div className="p-6 border-b border-gray-200">
-                        <h1 className="text-3xl font-bold text-gray-800 mb-2">{course.courseName}</h1>
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-800 mb-2">{course.courseName}</h1>
+                                <div className="mb-4">
+                                    <span className="text-2xl font-bold text-brand-primary">${course.price.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
                         <div className="flex items-center mb-4">
-                            <img 
-                                src={course.instructor.image} 
-                                alt={course.instructor.name} 
+                            <img
+                                src={course.instructor.image}
+                                alt={course.instructor.name}
                                 className="w-12 h-12 rounded-full mr-4"
                             />
                             <div>

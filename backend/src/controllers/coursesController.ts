@@ -8,6 +8,7 @@ class CoursesController {
             courseImage: "https://cdn.sanity.io/images/3do82whm/next/a69e3ba2441d35dd1a7945e826064708f30c10a9-1000x667.jpg?rect=1,0,999,667&w=800&h=534&fit=clip&auto=format",
             courseUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
             ratings: 4.8,
+            price: 89.99,
             instructor: {
                 name: "John Doe",
                 image: "https://cdn.pixabay.com/photo/2024/03/29/17/55/ai-generated-8663328_960_720.png",
@@ -26,9 +27,10 @@ class CoursesController {
             courseImage: "https://www.cdnsol.com/images/service/web-development/web-development.png",
             courseUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
             ratings: 4.7,
+            price: 129.99,
             instructor: {
                 name: "Sarah Lee",
-                image: "https://s39613.pcdn.co/wp-content/uploads/2019/08/PEACE-in-the-classroom.jpg",                
+                image: "https://s39613.pcdn.co/wp-content/uploads/2019/08/PEACE-in-the-classroom.jpg",
                 profession: "Full-Stack Developer & Tech Educator",
                 qualifications: [
                     "M.Sc. in Information Technology",
@@ -44,6 +46,7 @@ class CoursesController {
             courseImage: "https://www.cdnsol.com/images/service/web-development/web-development.png",
             courseUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
             ratings: 4.9,
+            price: 149.99,
             instructor: {
                 name: "Michael Chen",
                 image: "https://strictlypositiveteaching.org/wp-content/uploads/2018/05/img_0496.jpg",
@@ -57,13 +60,6 @@ class CoursesController {
             }
         }
     ];
-
-    constructor() {
-        this.getCourses = this.getCourses.bind(this);
-        this.getCourseById = this.getCourseById.bind(this);
-        this.registerCourse = this.registerCourse.bind(this);
-        this.getCourseVideo = this.getCourseVideo.bind(this);
-    }
 
     public getCourses(req: any, res: any) {
         res.status(200).json(this.courses);
